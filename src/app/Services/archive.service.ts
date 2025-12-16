@@ -38,6 +38,10 @@ export class ArchiveService {
     return this.http.get<PaginatedResponse<ArchiveItemDto>>(this.baseUrl, { params });
   }
 
+  getTodayRequests(): Observable<PaginatedResponse<ArchiveItemDto>> {
+    return this.http.get<PaginatedResponse<ArchiveItemDto>>(`${this.baseUrl}/GetToday`);
+  }
+
   updateAction(body: ActionRequest): Observable<{ isSuccess: boolean }> {
     return this.http.post<{ isSuccess: boolean }>(`${this.baseUrl}/ActionTaken`, body);
   }

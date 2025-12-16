@@ -13,6 +13,7 @@ export interface ArchiveRequestCreate {
   plateNumber: string;
   action: ArchiveType;
   note: string;
+  
 }
 
 export interface ArchiveItemDto {

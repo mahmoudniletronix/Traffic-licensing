@@ -47,7 +47,7 @@ export class LprRequest implements OnInit {
     this.todayLoading.set(true);
     this.todayError.set('');
 
-    this.archiveService.getAllRequests({ pageSize: 100 }).subscribe({
+    this.archiveService.getTodayRequests().subscribe({
       next: (res) => {
         this.todayLoading.set(false);
 
