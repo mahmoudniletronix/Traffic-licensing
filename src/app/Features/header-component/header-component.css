@@ -40,3 +40,47 @@
 .nav-link:hover {
   color: #3498db;
 }
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .police-header {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+  }
+
+  .logo-area {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .app-title {
+    font-size: 1.2rem;
+  }
+
+  .main-nav {
+    gap: 1rem;
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .nav-link {
+    font-size: 0.9rem;
+    padding: 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .police-header {
+    padding: 0.8rem;
+  }
+
+  .police-icon {
+    font-size: 1.5rem;
+  }
+
+  .app-title {
+    font-size: 1.1rem;
+  }
+}

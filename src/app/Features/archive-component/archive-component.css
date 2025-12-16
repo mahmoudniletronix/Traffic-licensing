@@ -320,15 +320,170 @@
   text-align: center;
 }
 
-/* Responsive */
+/* Responsive Design */
+
+/* Tablet and below (992px) */
 @media (max-width: 992px) {
   .grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr); /* 2 columns on tablet */
   }
+
+  .col {
+    min-height: 350px;
+  }
+
   .note {
-    max-width: 260px;
+    max-width: 100%;
+  }
+
+  .search-section {
+    flex-direction: column;
+  }
+
+  .search-input {
+    width: 100%;
   }
 }
+
+/* Mobile landscape and below (768px) */
+@media (max-width: 768px) {
+  .page {
+    padding: 8px;
+  }
+
+  .grid {
+    grid-template-columns: 1fr; /* Single column on mobile */
+    gap: 8px;
+  }
+
+  .col {
+    max-height: none;
+    min-height: auto;
+  }
+
+  .topbar {
+    flex-direction: column;
+    gap: 8px;
+    align-items: stretch;
+  }
+
+  .topbar h2 {
+    font-size: 16px;
+    text-align: center;
+  }
+
+  .topbar .btn {
+    width: 100%;
+  }
+
+  .stats-row {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .stat-item {
+    padding: 10px;
+  }
+
+  .search-section {
+    gap: 6px;
+  }
+
+  .search-input {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  .col-title {
+    font-size: 13px;
+  }
+
+  .hint {
+    font-size: 11px;
+  }
+
+  .card {
+    padding: 10px;
+  }
+
+  .pending-card {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .card-actions {
+    margin-top: 8px;
+  }
+
+  .summary-card {
+    padding: 8px;
+  }
+
+  .actions {
+    flex-direction: column;
+  }
+
+  .actions .btn {
+    width: 100%;
+  }
+
+  .reject-textarea {
+    min-height: 70px;
+  }
+
+  .pagination {
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 8px;
+  }
+
+  .page-info {
+    font-size: 12px;
+  }
+}
+
+/* Small mobile (480px) */
+@media (max-width: 480px) {
+  .page {
+    padding: 6px;
+  }
+
+  .topbar h2 {
+    font-size: 14px;
+  }
+
+  .btn {
+    font-size: 12px;
+    padding: 6px 10px;
+  }
+
+  .stat-item .val {
+    font-size: 14px;
+  }
+
+  .stat-item .lbl {
+    font-size: 10px;
+  }
+
+  .plate {
+    font-size: 12px;
+  }
+
+  .note {
+    font-size: 11px;
+  }
+
+  .col-title {
+    font-size: 12px;
+  }
+
+  .queue-badge,
+  .badge {
+    font-size: 10px;
+    padding: 2px 6px;
+  }
+}
+
 .card.disabled {
   opacity: 0.55;
   cursor: not-allowed;

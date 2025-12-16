@@ -261,8 +261,199 @@ textarea {
   border-color: #ffcdd2;
 }
 
+/* Responsive Design */
+
+/* Tablet and below (992px) */
 @media (max-width: 992px) {
+  .lpr-page .row {
+    flex-direction: column;
+  }
+
+  .col-md-4,
+  .col-md-8 {
+    width: 100%;
+    max-width: 100%;
+    flex: 0 0 100%;
+  }
+
+  .card {
+    margin-bottom: 12px;
+  }
+
+  .stats-row {
+    gap: 8px;
+  }
+}
+
+/* Mobile landscape and below (768px) */
+@media (max-width: 768px) {
   .lpr-page {
-    grid-template-columns: 1fr;
+    padding: 8px;
+  }
+
+  .card {
+    padding: 12px;
+  }
+
+  .title {
+    font-size: 16px;
+    margin-bottom: 10px;
+  }
+
+  .title-sm {
+    font-size: 14px;
+  }
+
+  label {
+    font-size: 13px;
+    margin: 8px 0 4px;
+  }
+
+  .plate-input {
+    font-size: 18px;
+    letter-spacing: 0.5rem;
+    padding: 8px;
+  }
+
+  textarea {
+    font-size: 14px;
+    padding: 8px;
+  }
+
+  .btn {
+    padding: 10px;
+    font-size: 14px;
+  }
+
+  .btn--ghost {
+    padding: 6px 10px;
+  }
+
+  .header-row {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .muted {
+    font-size: 13px;
+  }
+
+  .stats-row {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .stat-item {
+    padding: 10px;
+  }
+
+  .stat-item .val {
+    font-size: 16px;
+  }
+
+  .stat-item .lbl {
+    font-size: 10px;
+  }
+
+  .list {
+    gap: 8px;
+  }
+
+  .row-item {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 10px;
+  }
+
+  .row-main {
+    margin-bottom: 6px;
+  }
+
+  .plate {
+    font-size: 13px;
+    letter-spacing: 0.15rem;
+  }
+
+  .notes {
+    max-width: 100%;
+    white-space: normal;
+    font-size: 12px;
+  }
+
+  .row-side {
+    justify-content: flex-start;
+  }
+
+  .badge {
+    font-size: 11px;
+    padding: 3px 8px;
+  }
+
+  /* Archive Type Options */
+  .archive-type-options {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .radio-option {
+    padding: 10px;
+  }
+}
+
+/* Small mobile (480px) */
+@media (max-width: 480px) {
+  .lpr-page {
+    padding: 6px;
+  }
+
+  .card {
+    padding: 10px;
+  }
+
+  .title {
+    font-size: 14px;
+  }
+
+  .title-sm {
+    font-size: 13px;
+  }
+
+  label {
+    font-size: 12px;
+  }
+
+  .plate-input {
+    font-size: 16px;
+    letter-spacing: 0.4rem;
+  }
+
+  textarea {
+    font-size: 13px;
+  }
+
+  .btn {
+    padding: 8px;
+    font-size: 13px;
+  }
+
+  .stat-item .val {
+    font-size: 14px;
+  }
+
+  .plate {
+    font-size: 12px;
+  }
+
+  .notes {
+    font-size: 11px;
+  }
+
+  .badge {
+    font-size: 10px;
+    padding: 2px 6px;
+  }
+
+  .error {
+    font-size: 12px;
   }
 }

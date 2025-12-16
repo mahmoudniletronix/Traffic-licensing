@@ -45,7 +45,7 @@
       <div
         class="card pending-card"
         *ngFor="let r of pending(); let i = index"
-        [class.disabled]="!isFirstPending(r.id)"
+        [class.disabled]="!isNextAvailable(r.id)"
         [class.selected]="isInProgress(r.id)"
       >
         <div class="card-main">
@@ -57,13 +57,13 @@
           <button
             class="btn small"
             (click)="execute(r); $event.stopPropagation()"
-            [disabled]="!isFirstPending(r.id) || isInProgress(r.id)"
+            [disabled]="!isNextAvailable(r.id) || isInProgress(r.id)"
           >
             تنفيذ
           </button>
         </div>
 
-        <div class="queue-badge" *ngIf="isFirstPending(r.id) && !isInProgress(r.id)">
+        <div class="queue-badge" *ngIf="isNextAvailable(r.id) && !isInProgress(r.id)">
           التالي للتنفيذ
         </div>
       </div>

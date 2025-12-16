@@ -131,10 +131,16 @@ export class ArchiveComponent implements OnInit {
     this.completedRequests().filter((r) => r.actionTaken === ArchiveAction.Rejected)
   );
 
-  firstPendingId = computed(() => this.pending()[0]?.id ?? null);
+  // Find next available (unselected) pending request
+  nextAvailablePendingId = computed(() => {
+    const pendingList = this.pending();
+    const inProgressSet = new Set(this.inProgressIds());
+    const nextAvailable = pendingList.find((r) => !inProgressSet.has(r.id));
+    return nextAvailable?.id ?? null;
+  });
 
-  isFirstPending(id: string): boolean {
-    return this.firstPendingId() === id;
+  isNextAvailable(id: string): boolean {
+    return this.nextAvailablePendingId() === id;
   }
 
   isInProgress(id: string): boolean {
@@ -151,7 +157,8 @@ export class ArchiveComponent implements OnInit {
   // ===== Actions =====
 
   execute(req: ArchiveItemDto): void {
-    if (!this.isFirstPending(req.id)) return;
+    // Allow execution only if this is the next available (unselected) pending request
+    if (!this.isNextAvailable(req.id)) return;
 
     this.inProgressIds.update((ids) => (ids.includes(req.id) ? ids : [...ids, req.id]));
   }
