@@ -1,0 +1,95 @@
+<div class="container-fluid lpr-page">
+  <div class="row">
+    <!-- FORM -->
+    <div class="col-md-4">
+      <div class="card h-100">
+        <h2 class="title">التقاط اللوحات</h2>
+
+        <label>رقم اللوحة</label>
+        <input
+          type="text"
+          [(ngModel)]="plateNumber"
+          class="plate-input"
+          placeholder="أدخل رقم اللوحة"
+          autocomplete="off"
+          spellcheck="false"
+          (input)="formatPlateNumber()"
+        />
+
+        <label>ملاحظة</label>
+        <textarea rows="4" [(ngModel)]="note" placeholder="اكتب ملاحظات..."></textarea>
+
+        <div class="error" *ngIf="errorMsg()">{{ errorMsg() }}</div>
+
+        <label>نوع الطلب</label>
+        <div class="archive-type-options">
+          <label class="radio-option">
+            <input
+              type="radio"
+              name="archiveType"
+              [value]="ArchiveTypeEnum.SendFile"
+              [(ngModel)]="archiveType"
+            />
+            <span>إرسال ملف</span>
+          </label>
+          <label class="radio-option">
+            <input
+              type="radio"
+              name="archiveType"
+              [value]="ArchiveTypeEnum.Other"
+              [(ngModel)]="archiveType"
+            />
+            <span>أخرى</span>
+          </label>
+        </div>
+
+        <button class="btn" (click)="submit()" [disabled]="isSubmitting()">
+          {{ isSubmitting() ? 'جارٍ الإرسال...' : 'إرسال' }}
+        </button>
+      </div>
+    </div>
+
+    <!-- TODAY REQUESTS -->
+    <div class="col-md-8">
+      <div class="card h-100">
+        <div class="header-row">
+          <h3 class="title-sm">طلبات اليوم</h3>
+          <div class="muted">({{ todayCount() }})</div>
+          <button class="btn btn--ghost" type="button" (click)="loadToday()">تحديث</button>
+        </div>
+
+        <div class="state" *ngIf="todayLoading()">جارٍ التحميل...</div>
+        <div class="state error" *ngIf="todayError()">{{ todayError() }}</div>
+
+        <div class="stats-row" *ngIf="!todayLoading() && !todayError()">
+          <div class="stat-item pending">
+            <span class="val">{{ todayPending() }}</span>
+            <span class="lbl">قيد الانتظار</span>
+          </div>
+          <div class="stat-item approved">
+            <span class="val">{{ todayApproved() }}</span>
+            <span class="lbl">تمت الموافقة</span>
+          </div>
+          <div class="stat-item rejected">
+            <span class="val">{{ todayRejected() }}</span>
+            <span class="lbl">مرفوض</span>
+          </div>
+        </div>
+
+        <div class="list" *ngIf="!todayLoading() && !todayError()">
+          <div class="row-item" *ngFor="let r of todayRequests()">
+            <div class="row-main">
+              <div class="plate">{{ r.plateNumber }}</div>
+              <div class="notes">{{ r.note }}</div>
+            </div>
+            <div class="row-side">
+              <span [class]="badgeClass(r.actionTaken)">{{ getActionLabel(r.actionTaken) }}</span>
+            </div>
+          </div>
+
+          <div class="empty" *ngIf="todayRequests().length === 0">لا توجد طلبات اليوم.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

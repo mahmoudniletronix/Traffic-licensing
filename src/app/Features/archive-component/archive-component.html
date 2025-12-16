@@ -1,0 +1,198 @@
+<div class="page">
+  <div class="topbar">
+    <h2>الأرشيف</h2>
+    <button class="btn" (click)="loadRequests()">تحديث</button>
+  </div>
+
+  <!-- Search Bar -->
+  <div class="search-section" *ngIf="!loading() && !errorMsg()">
+    <input
+      type="text"
+      class="search-input"
+      placeholder="ابحث برقم اللوحة..."
+      [(ngModel)]="searchText"
+      (keyup.enter)="onSearch()"
+    />
+    <button class="btn" (click)="onSearch()">بحث</button>
+  </div>
+
+  <div class="stats-row" *ngIf="!loading() && !errorMsg()">
+    <div class="stat-item pending">
+      <span class="val">{{ pending().length }}</span>
+      <span class="lbl">قيد الانتظار</span>
+    </div>
+    <div class="stat-item approved">
+      <span class="val">{{ approved().length }}</span>
+      <span class="lbl">تمت الموافقة</span>
+    </div>
+    <div class="stat-item rejected">
+      <span class="val">{{ rejected().length }}</span>
+      <span class="lbl">مرفوض</span>
+    </div>
+  </div>
+
+  <div class="state" *ngIf="loading()">جارٍ التحميل...</div>
+  <div class="state error" *ngIf="errorMsg()">{{ errorMsg() }}</div>
+
+  <div class="grid">
+    <!-- COL 1: Pending -->
+    <div class="col">
+      <div class="col-title">الطلبات الجديدة (Pending)</div>
+      <div class="hint" *ngIf="pending().length">
+        الاختيار/التنفيذ بالترتيب (الأول ثم الذي يليه)
+      </div>
+
+      <div
+        class="card pending-card"
+        *ngFor="let r of pending(); let i = index"
+        [class.disabled]="!isFirstPending(r.id)"
+        [class.selected]="isInProgress(r.id)"
+      >
+        <div class="card-main">
+          <div class="plate">{{ r.plateNumber }}</div>
+          <div class="note">{{ r.note }}</div>
+        </div>
+
+        <div class="card-actions">
+          <button
+            class="btn small"
+            (click)="execute(r); $event.stopPropagation()"
+            [disabled]="!isFirstPending(r.id) || isInProgress(r.id)"
+          >
+            تنفيذ
+          </button>
+        </div>
+
+        <div class="queue-badge" *ngIf="isFirstPending(r.id) && !isInProgress(r.id)">
+          التالي للتنفيذ
+        </div>
+      </div>
+
+      <div class="empty" *ngIf="pending().length === 0">لا يوجد طلبات Pending</div>
+    </div>
+
+    <!-- COL 3: Summary + pending -->
+    <div class="col">
+      <div class="col-title">تفاصيل الطلب (Summary + pending)</div>
+
+      <div class="empty" *ngIf="inProgress().length === 0">
+        اضغط "تنفيذ" على أول طلب في العمود الأول لإضافته هنا (ويمكن إضافة أكثر من طلب)
+      </div>
+
+      <div class="work-list" *ngIf="inProgress().length > 0">
+        <div class="summary-card" *ngFor="let r of inProgress()">
+          <div class="summary-head">
+            <div class="plate">{{ r.plateNumber }}</div>
+            <button class="btn ghost small" (click)="removeFromWorkList(r.id)">إزالة</button>
+          </div>
+
+          <div class="summary-body">
+            <div class="row">
+              <span>المعرف:</span> <b>{{ r.id }}</b>
+            </div>
+            <div class="row">
+              <span>الملاحظات:</span> <b>{{ r.note }}</b>
+            </div>
+          </div>
+
+          <div class="actions">
+            <button class="btn ok small" (click)="approve(r.id)" *ngIf="rejectingId() !== r.id">
+              موافقة
+            </button>
+            <button class="btn danger small" (click)="reject(r.id)" *ngIf="rejectingId() !== r.id">
+              رفض
+            </button>
+          </div>
+
+          <!-- Reject Reason Box -->
+          <div class="reject-box" *ngIf="rejectingId() === r.id">
+            <label class="reject-label">سبب الرفض</label>
+            <textarea
+              class="reject-textarea"
+              [(ngModel)]="rejectReason"
+              placeholder="اكتب سبب الرفض..."
+              rows="3"
+            ></textarea>
+            <div class="reject-actions">
+              <button class="btn danger small" (click)="confirmReject(r.id)">تأكيد الرفض</button>
+              <button class="btn ghost small" (click)="cancelReject()">إلغاء</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- COL 4: Done -->
+    <div class="col">
+      <div class="col-title">تم التنفيذ</div>
+
+      <div class="card done" *ngFor="let r of approved()">
+        <div class="plate">{{ r.plateNumber }}</div>
+        <div class="note">{{ r.note }}</div>
+        <div class="badge approved">Approved</div>
+
+        <button class="btn ghost small rollback" (click)="rollbackToPending(r.id)">رجوع</button>
+      </div>
+
+      <div class="card done" *ngFor="let r of rejected()">
+        <div class="plate">{{ r.plateNumber }}</div>
+        <div class="note">{{ r.note }}</div>
+        <div class="badge rejected">Rejected</div>
+
+        <!-- Reject Reason -->
+        <div class="reject-reason" *ngIf="r.rejectReason">
+          <strong>سبب الرفض:</strong> {{ r.rejectReason }}
+        </div>
+
+        <button class="btn ghost small rollback" (click)="rollbackToPending(r.id)">رجوع</button>
+      </div>
+    </div>
+    <!-- COL 2: Search Results -->
+    <div class="col" *ngIf="searchResults().length > 0">
+      <div class="col-title">نتائج البحث ({{ searchResults().length }})</div>
+
+      <div class="card search-result-card" *ngFor="let r of searchResults()">
+        <div class="card-header">
+          <div class="plate">{{ r.plateNumber }}</div>
+          <div
+            class="badge"
+            [ngClass]="{
+              'badge--pending': r.actionTaken === 0,
+              'badge--rejected': r.actionTaken === 1,
+              'badge--approved': r.actionTaken === 2
+            }"
+          >
+            {{
+              r.actionTaken === 0 ? 'قيد الانتظار' : r.actionTaken === 1 ? 'مرفوض' : 'موافق عليه'
+            }}
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="info-row" *ngIf="r.note"><strong>ملاحظة:</strong> {{ r.note }}</div>
+          <div class="info-row" *ngIf="r.rejectReason">
+            <strong>سبب الرفض:</strong> {{ r.rejectReason }}
+          </div>
+        </div>
+      </div>
+
+      <div class="empty" *ngIf="searchResults().length === 0">لا توجد نتائج</div>
+    </div>
+  </div>
+
+  <!-- Pagination Controls -->
+  <div class="pagination" *ngIf="!loading() && totalPages() > 1">
+    <button
+      class="btn small"
+      [disabled]="!hasPreviousPage"
+      (click)="onPageChange(currentPage() - 1)"
+    >
+      السابق
+    </button>
+    <span class="page-info">
+      صفحة {{ currentPage() }} من {{ totalPages() }} ({{ totalItems() }} طلب)
+    </span>
+    <button class="btn small" [disabled]="!hasNextPage" (click)="onPageChange(currentPage() + 1)">
+      التالي
+    </button>
+  </div>
+</div>

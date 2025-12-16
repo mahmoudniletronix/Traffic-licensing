@@ -1,0 +1,39 @@
+/* Global Layout */
+html,
+body {
+  height: 100%;
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f4f6f7;
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.main-content {
+  flex: 1;
+  padding: 20px;
+}
+
+/* Floating Logo */
+.company-logo-fixed {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+  opacity: 0.8;
+  transition: opacity 0.3s ease;
+}
+
+.company-logo-fixed:hover {
+  opacity: 1;
+}
+
+.company-logo-fixed img {
+  height: 25px;
+  width: auto;
+  display: block;
+}
