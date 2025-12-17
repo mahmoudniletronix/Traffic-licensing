@@ -5,12 +5,13 @@
   </div>
 
   <!-- Search Bar -->
-  <div class="search-section" *ngIf="!loading() && !errorMsg()">
+  <div class="search-section">
     <input
       type="text"
       class="search-input"
       placeholder="ابحث برقم اللوحة..."
       [(ngModel)]="searchText"
+      (ngModelChange)="onSearchTextChange($event)"
       (keyup.enter)="onSearch()"
     />
     <button class="btn" (click)="onSearch()">بحث</button>

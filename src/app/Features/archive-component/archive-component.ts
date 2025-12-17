@@ -3,6 +3,9 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ArchiveService } from '../../Services/archive.service';
 import { ArchiveAction, ArchiveItemDto } from '../../Core/Models/archive.models';
+import { Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { formatPlateNumber } from '../../Core/Models/plate.utils';
 
 @Component({
   selector: 'app-archive-component',
@@ -38,10 +41,22 @@ export class ArchiveComponent implements OnInit {
   completedPageSize = signal(10);
   completedTotalItems = signal(0);
   completedTotalPages = signal(0);
+  // Search Subject for debounce
+  private searchSubject = new Subject<string>();
+
   ngOnInit(): void {
     this.loadRequests();
     this.loadCompletedRequests();
-    this.loadRequests();
+
+    // Setup live search subscription
+    this.searchSubject
+      .pipe(
+        debounceTime(300), // Wait 300ms after last event
+        distinctUntilChanged() // Only if value changed
+      )
+      .subscribe(() => {
+        this.onSearch();
+      });
   }
 
   loadRequests(): void {
@@ -223,8 +238,14 @@ export class ArchiveComponent implements OnInit {
   // ===== Search & Pagination =====
 
   onSearch(): void {
-    this.currentPage.set(1); // Reset to first page on new search
+    this.currentPage.set(1);
     this.loadRequests();
+  }
+
+  onSearchTextChange(text: string): void {
+    const formatted = formatPlateNumber(text);
+    this.searchText.set(text);
+    this.searchSubject.next(formatted);
   }
 
   onPageChange(page: number): void {
