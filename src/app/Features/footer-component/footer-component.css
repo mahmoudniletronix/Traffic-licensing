@@ -1,37 +1,27 @@
 .police-footer {
-  background-color: #1a1a1a;
+  background: linear-gradient(to left, #0f2027, #203a43, #1a1a1a);
   color: #bdc3c7;
-  padding: 1rem 2rem;
+  padding: 0.9rem 0;
   border-top: 3px solid #003366;
+  font-size: 0.85rem;
 }
 
-.footer-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
+/* Text styles */
 .copyright {
-  margin: 0;
-  font-size: 0.9rem;
+  font-weight: 500;
+  letter-spacing: 0.2px;
 }
 
 .version {
+  color: #95a5a6;
   font-size: 0.8rem;
-  color: #7f8c8d;
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
-  .police-footer {
-    padding: 1rem;
-  }
-
-  .footer-container {
-    flex-direction: column;
-    gap: 0.8rem;
-    text-align: center;
-  }
+/* Small polish */
+.police-footer::before {
+  content: '';
+  display: block;
+  height: 1px;
+  background: linear-gradient(to left, transparent, rgba(255, 255, 255, 0.15), transparent);
+  margin-bottom: 0.6rem;
 }
